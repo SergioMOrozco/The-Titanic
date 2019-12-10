@@ -1,2 +1,4 @@
 *.code-workspace
 *.csv
+__pycache__/NameSplitter.cpython-37.pyc
+__pycache__/TitanicPipeline.cpython-37.pyc
