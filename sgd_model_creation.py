@@ -1,5 +1,5 @@
 from sklearn.linear_model import SGDClassifier
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import GridSearchCV
 import TitanicPipeline
 import pandas as pd
 import numpy as np
@@ -13,5 +13,18 @@ preprocessed_titanic_data_df = pd.DataFrame(preprocessed_titanic_data,columns=pi
 
 X_train = preprocessed_titanic_data_df.drop(['Survived'], axis=1)
 y_train = preprocessed_titanic_data_df["Survived"]
-sgd_clf = SGDClassifier(random_state=42)
-print(cross_val_score(sgd_clf,X_train,y_train,scoring="accuracy",cv=3))
+
+sgd_clf = SGDClassifier(random_state=42,)
+
+grid_param = {
+    'loss' : ['hinge','modified_huber','log'],
+    'penalty' : ['l1','l2','elasticnet']
+}
+
+gd_sr = GridSearchCV(sgd_clf,grid_param,scoring='accuracy',cv=5,n_jobs=8)
+
+gd_sr.fit(X_train,y_train)
+
+print(gd_sr.best_params_)
+print(gd_sr.best_score_)
+
