@@ -16,7 +16,7 @@ preprocessed_titanic_data_df = pd.DataFrame(preprocessed_titanic_data,columns=pi
 X_train = preprocessed_titanic_data_df.drop(['Survived'], axis=1)
 y_train = preprocessed_titanic_data_df["Survived"]
 
-sgd_clf = SGDClassifier(random_state=42,)
+sgd_clf = SGDClassifier(random_state=42,max_iter=5000)
 
 grid_param = {
     'loss' : ['hinge','modified_huber','log','squared_hinge','perceptron'],
@@ -25,12 +25,12 @@ grid_param = {
     'eta0' : expon(scale=4)
 }
 
-gd_sgd = RandomizedSearchCV(sgd_clf,grid_param,scoring='accuracy',cv=5,n_jobs=8)
+gd_sgd = RandomizedSearchCV(sgd_clf,grid_param,scoring='accuracy',cv=5,n_jobs=8,n_iter=20)
 
 gd_sgd.fit(X_train,y_train)
 
 print(gd_sgd.best_params_)
 print(gd_sgd.best_score_)
 
-joblib.dump(gd_sgd, "sgd_classifier.pkl")
+joblib.dump(gd_sgd.best_estimator_, "sgd_classifier.pkl")
 
