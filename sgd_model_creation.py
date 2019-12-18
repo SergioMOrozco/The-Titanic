@@ -25,12 +25,13 @@ grid_param = {
     'eta0' : expon(scale=4)
 }
 
-gd_sgd = RandomizedSearchCV(sgd_clf,grid_param,scoring='accuracy',cv=5,n_jobs=8,n_iter=20)
+gd_sgd = RandomizedSearchCV(sgd_clf,grid_param,scoring='accuracy',cv=10,n_jobs=8,n_iter=50)
 
 gd_sgd.fit(X_train,y_train)
 
 print(gd_sgd.best_params_)
 print(gd_sgd.best_score_)
 
+## Best : 82.267%
 joblib.dump(gd_sgd.best_estimator_, "sgd_classifier.pkl")
 

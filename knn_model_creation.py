@@ -1,6 +1,7 @@
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import RandomizedSearchCV
-from scipy.stats import reciprocal,randint
+from sklearn.externals import joblib
+from scipy.stats import randint
 import TitanicPipeline
 import pandas as pd
 
@@ -22,7 +23,10 @@ grid_param = {
     'n_neighbors' : randint(1,100)
 }
 
-gd_knn = RandomizedSearchCV(knn_clf,grid_param,cv=5,n_jobs=8,n_iter=20, scoring='accuracy')
+gd_knn = RandomizedSearchCV(knn_clf,grid_param,cv=10,n_jobs=8,n_iter=50, scoring='accuracy')
 gd_knn.fit(X_train,y_train)
 print(gd_knn.best_params_)
 print(gd_knn.best_score_)
+
+## Best : 81.93%
+joblib.dump(gd_knn.best_estimator_, "knn_classifier.pkl")
