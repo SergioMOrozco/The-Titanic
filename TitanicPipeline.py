@@ -1,6 +1,7 @@
 import numpy as np
 import category_encoders as ce
 import NameSplitter
+import AgeSplitter
 from sklearn.base import BaseEstimator,TransformerMixin
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, MinMaxScaler
@@ -11,7 +12,7 @@ class TitanicPipeline(BaseEstimator,TransformerMixin):
 
     def __init__(self, using_neural_net=False):
 
-        self._num_list = ['Pclass','Age','SibSp','Parch','Fare']
+        self._num_list = ['Pclass','SibSp','Parch','Fare']
 
         self._embarked_pipeline = Pipeline([
         ('imputer', SimpleImputer(strategy="most_frequent", missing_values=np.nan)), ## gets most frequently used value and replaces nan's with that value
@@ -33,6 +34,7 @@ class TitanicPipeline(BaseEstimator,TransformerMixin):
             ("numerical",self._num_pipeline, self._num_list ),
             ("embarked", self._embarked_pipeline, ['Embarked'] ),
             ("name",NameSplitter.NameSplitter(),['Name']),
+            ("age",AgeSplitter.AgeSplitter(),['Age']),
             ("cat", self._cat_pipeline, ['Ticket','Sex','Survived']),
         ])
 
@@ -46,5 +48,6 @@ class TitanicPipeline(BaseEstimator,TransformerMixin):
         self.categories.extend(self._preprocessor.transformers_[1][1][1].categories_[0].tolist())
         self.categories.extend(self._preprocessor.transformers_[2][1].last_name_categories_)  
         self.categories.extend(self._preprocessor.transformers_[2][1].title_categories_)  
+        self.categories.extend(self._preprocessor.transformers_[3][1].age_categories_)
         self.categories.extend(['Ticket','Sex','Survived'])
         return transformed_data
