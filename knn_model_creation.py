@@ -20,7 +20,9 @@ knn_clf = KNeighborsClassifier()
 grid_param = {
     'weights' : ['uniform','distance'],
     'algorithm' : ['ball_tree','kd_tree','brute','auto'],
-    'n_neighbors' : randint(1,100)
+    'n_neighbors' : randint(1,100),
+    'leaf_size' : randint(1,100),
+    'p' : [1,2,3,4]
 }
 
 gd_knn = RandomizedSearchCV(knn_clf,grid_param,cv=10,n_jobs=8,n_iter=50, scoring='accuracy')
@@ -28,5 +30,5 @@ gd_knn.fit(X_train,y_train)
 print(gd_knn.best_params_)
 print(gd_knn.best_score_)
 
-## Best : 81.93%
+## Best : 82.49%
 joblib.dump(gd_knn.best_estimator_, "knn_classifier.pkl")

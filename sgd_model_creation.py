@@ -32,6 +32,6 @@ gd_sgd.fit(X_train,y_train)
 print(gd_sgd.best_params_)
 print(gd_sgd.best_score_)
 
-## Best : 82.267%
+## Best : 81.37%
 joblib.dump(gd_sgd.best_estimator_, "sgd_classifier.pkl")
 

@@ -30,11 +30,17 @@ class TitanicPipeline(BaseEstimator,TransformerMixin):
         ('feature_scaler', MinMaxScaler()), ## Replaces each string with an integer [0,n_categories-1]
         ])
 
+        self._cabin_pipeline = Pipeline([
+            ('imputer', SimpleImputer(strategy="constant", fill_value='U')),
+            ('hash', ce.HashingEncoder(n_components=8))
+        ])
+
         self._preprocessor = ColumnTransformer([
             ("numerical",self._num_pipeline, self._num_list ),
             ("embarked", self._embarked_pipeline, ['Embarked'] ),
             ("name",NameSplitter.NameSplitter(),['Name']),
             ("age",AgeSplitter.AgeSplitter(),['Age']),
+            ("cabin",self._cabin_pipeline,['Cabin']),
             ("cat", self._cat_pipeline, ['Ticket','Sex','Survived']),
         ])
 
@@ -49,5 +55,6 @@ class TitanicPipeline(BaseEstimator,TransformerMixin):
         self.categories.extend(self._preprocessor.transformers_[2][1].last_name_categories_)  
         self.categories.extend(self._preprocessor.transformers_[2][1].title_categories_)  
         self.categories.extend(self._preprocessor.transformers_[3][1].age_categories_)
+        self.categories.extend([ "Cabin_" + str(i) for i in range(self._preprocessor.transformers_[4][1][1].n_components)])
         self.categories.extend(['Ticket','Sex','Survived'])
         return transformed_data

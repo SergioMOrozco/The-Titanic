@@ -4,7 +4,7 @@ from sklearn.base import BaseEstimator,TransformerMixin
 from sklearn.impute import SimpleImputer
 
 class AgeSplitter(BaseEstimator,TransformerMixin):
-    def __init__(self, age_threshold=5,strategy="most_frequent"):
+    def __init__(self, age_threshold=15,strategy="most_frequent"):
         self.age_threshold = age_threshold
         self.strategy = strategy
         self.age_categories_ = ['Age > ' + str(self.age_threshold)]

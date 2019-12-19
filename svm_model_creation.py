@@ -14,12 +14,12 @@ preprocessed_titanic_data_df = pd.DataFrame(preprocessed_titanic_data,columns=pi
 X_train = preprocessed_titanic_data_df.drop(['Survived'], axis=1)
 y_train = preprocessed_titanic_data_df["Survived"]
 
-svm_clf = SVC(gamma='auto',)
+svm_clf = SVC()
 
 grid_param = {
     'kernel' : ['linear','rbf'],
     'degree' : randint(1,100),
-    'C' : [10],
+    'C' : [1,10,100],
     'gamma' : [1,0.1,0,0.01,0.001]
 }
 
@@ -30,5 +30,5 @@ gd_svm.fit(X_train,y_train)
 print (gd_svm.best_params_)
 print (gd_svm.best_score_)
 
-## Best :
+## Best : 81.82%
 joblib.dump(gd_svm.best_estimator_, "svm_classifier.pkl")
