@@ -30,5 +30,9 @@ gd_svm.fit(X_train,y_train)
 print (gd_svm.best_params_)
 print (gd_svm.best_score_)
 
+best_svm = SVC()
+best_svm.set_params(**gd_svm.best_params_)
+best_svm.fit(X_train,y_train)
+
 ## Best : 81.82%
-joblib.dump(gd_svm.best_estimator_, "svm_classifier.pkl")
+joblib.dump(best_svm, "svm_classifier.pkl")

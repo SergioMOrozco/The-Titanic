@@ -32,6 +32,10 @@ gd_sgd.fit(X_train,y_train)
 print(gd_sgd.best_params_)
 print(gd_sgd.best_score_)
 
+best_sgd = SGDClassifier()
+best_sgd.set_params(**gd_sgd.best_params_)
+best_sgd.fit(X_train,y_train)
+
 ## Best : 81.37%
-joblib.dump(gd_sgd.best_estimator_, "sgd_classifier.pkl")
+joblib.dump(best_sgd, "sgd_classifier.pkl")
 

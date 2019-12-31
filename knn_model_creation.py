@@ -30,5 +30,9 @@ gd_knn.fit(X_train,y_train)
 print(gd_knn.best_params_)
 print(gd_knn.best_score_)
 
+best_knn = KNeighborsClassifier()
+best_knn.set_params(**gd_knn.best_params_)
+best_knn.fit(X_train,y_train)
+
 ## Best : 82.49%
-joblib.dump(gd_knn.best_estimator_, "knn_classifier.pkl")
+joblib.dump(best_knn, "knn_classifier.pkl")

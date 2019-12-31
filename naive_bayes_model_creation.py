@@ -1,5 +1,6 @@
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.model_selection import cross_val_score
+from sklearn.externals import joblib
 import TitanicPipeline
 import pandas as pd
 
@@ -16,4 +17,7 @@ y_train = preprocessed_titanic_data_df["Survived"]
 
 nb_clf = BernoulliNB()
 
-print(cross_val_score(nb_clf,X_train,y_train,cv=10,scoring='accuracy'))
+nb_clf.fit(X_train,y_train)
+
+## Averages around 77%
+joblib.dump(nb_clf, "naive_bayes_classifier.pkl")
