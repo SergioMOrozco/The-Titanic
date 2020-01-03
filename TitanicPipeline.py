@@ -10,9 +10,14 @@ from sklearn.compose import ColumnTransformer
 
 class TitanicPipeline(BaseEstimator,TransformerMixin):
 
-    def __init__(self, using_neural_net=False):
+    def __init__(self, is_testing = False):
 
         self._num_list = ['Pclass','SibSp','Parch','Fare']
+
+        if is_testing :
+            self._cat_list = ['Ticket','Sex']
+        else:
+            self._cat_list = ['Ticket','Sex','Survived']
 
         self._embarked_pipeline = Pipeline([
         ('imputer', SimpleImputer(strategy="most_frequent", missing_values=np.nan)), ## gets most frequently used value and replaces nan's with that value
@@ -41,7 +46,7 @@ class TitanicPipeline(BaseEstimator,TransformerMixin):
             ("name",NameSplitter.NameSplitter(),['Name']),
             ("age",AgeSplitter.AgeSplitter(),['Age']),
             ("cabin",self._cabin_pipeline,['Cabin']),
-            ("cat", self._cat_pipeline, ['Ticket','Sex','Survived']),
+            ("cat", self._cat_pipeline, self._cat_list),
         ])
 
     def fit(self,X,y=None):
@@ -56,5 +61,5 @@ class TitanicPipeline(BaseEstimator,TransformerMixin):
         self.categories.extend(self._preprocessor.transformers_[2][1].title_categories_)  
         self.categories.extend(self._preprocessor.transformers_[3][1].age_categories_)
         self.categories.extend([ "Cabin_" + str(i) for i in range(self._preprocessor.transformers_[4][1][1].n_components)])
-        self.categories.extend(['Ticket','Sex','Survived'])
+        self.categories.extend(self._cat_list)
         return transformed_data
